@@ -3,6 +3,8 @@ name: Build LaTeX documents
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -43,6 +45,7 @@ jobs:
             build/**/*.pdfpc
 
       - name: Copy PDFs to output
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           rm -rf output
           mkdir -p output
@@ -50,6 +53,7 @@ jobs:
           find build -name "*.pdfpc" -exec cp {} output/ \;
 
       - name: Commit and push output
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

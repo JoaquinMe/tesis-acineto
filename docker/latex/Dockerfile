@@ -23,6 +23,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     biber \
     latexmk \
     make \
+    python3 \
     ghostscript \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*

@@ -66,6 +66,25 @@ CONTAINER_ENGINE=podman ./scripts/03_build/03_build_container.sh all
 BUILD_IMAGE=0 ./scripts/03_build/03_build_container.sh plan_tesis
 ```
 
+### Compilar nativamente en CachyOS / Arch Linux
+
+Instalar las dependencias una sola vez:
+
+```bash
+sudo pacman -Syu --needed \
+  make python biber ghostscript \
+  texlive-basic texlive-binextra texlive-latexextra \
+  texlive-bibtexextra texlive-langspanish \
+  texlive-fontsrecommended texlive-fontsextra \
+  texlive-mathscience texlive-pictures
+```
+
+Luego compilar normalmente:
+
+```bash
+make all-projects
+```
+
 ## Indice comentado
 
 En el manuscrito se puede usar:
@@ -84,7 +103,7 @@ El script `indice_comentado/extract_index.py` lee los capitulos incluidos en `ma
 
 ## GitHub Actions
 
-El workflow `.github/workflows/latex.yaml` compila con Docker en cada push a `main`, publica los PDFs como artefactos descargables y copia las salidas finales en `output/`. Si hay cambios, GitHub Actions commitea y pushea esa carpeta automaticamente con `[skip ci]`.
+El workflow `.github/workflows/latex.yaml` valida la compilacion en cada pull request a `main` y en cada push a esa rama. En los pushes a `main`, publica los PDFs como artefactos descargables y copia las salidas finales en `output/`. Si hay cambios, GitHub Actions commitea y pushea esa carpeta automaticamente con `[skip ci]`.
 
 ## Limpieza
 

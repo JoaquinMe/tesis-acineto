@@ -34,7 +34,9 @@ all-projects:
 		$(MAKE) PROJECT="$$p" || exit $$?; \
 	done
 
-$(OUTPUT_PATH): $(TEX_MAIN)
+# LaTeX descubre inclusiones, bibliografía y estilos durante la compilación.
+# Forzar el target evita entregar un PDF viejo al editar alguno de esos archivos.
+$(OUTPUT_PATH): FORCE
 	@if [ "$(PROJECT)" = "indice_comentado" ]; then \
 		echo "Running extraction script for $(PROJECT)..."; \
 		cd $(SRC_DIR) && python3 extract_index.py; \
@@ -57,4 +59,6 @@ clean-all:
 	rm -rf build/*
 	find . -maxdepth 3 \( -name "*.aux" -o -name "*.fdb_latexmk" -o -name "*.fls" -o -name "*.log" -o -name "*.bbl" -o -name "*.blg" -o -name "*.bcf" -o -name "*.run.xml" -o -name "*.nav" -o -name "*.snm" -o -name "*.toc" -o -name "*.out" -o -name "*.synctex.gz" -o -name "main.pdf" -o -name "main.pdfpc" \) -exec rm -f {} +
 
-.PHONY: all all-projects clean clean-all
+FORCE:
+
+.PHONY: all all-projects clean clean-all FORCE
