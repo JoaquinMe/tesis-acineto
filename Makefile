@@ -10,7 +10,13 @@ BUILD_DIR := build/$(PROJECT)
 
 TEX_MAIN := $(SRC_DIR)/main.tex
 
-OUTPUT_NAME := $(STUDENT_LAST)_$(STUDENT_NAME)_$(STUDENT_LU)_tesis_$(PROJECT).pdf
+# Los datos pueden contener espacios (o espacios de cierre accidentales).  El
+# nombre de archivo se normaliza para que siga siendo un único target de make.
+empty :=
+space := $(empty) $(empty)
+filename_component = $(subst $(space),_,$(strip $(1)))
+
+OUTPUT_NAME := $(call filename_component,$(STUDENT_LAST))_$(call filename_component,$(STUDENT_NAME))_$(call filename_component,$(STUDENT_LU))_tesis_$(PROJECT).pdf
 OUTPUT_PATH := $(BUILD_DIR)/$(OUTPUT_NAME)
 
 # =========================
@@ -43,9 +49,9 @@ $(OUTPUT_PATH): FORCE
 	fi
 	mkdir -p $(BUILD_DIR)
 	cd $(SRC_DIR) && $(LATEXMK) -outdir=../$(BUILD_DIR) main.tex
-	mv $(BUILD_DIR)/main.pdf $(OUTPUT_PATH)
+	mv "$(BUILD_DIR)/main.pdf" "$(OUTPUT_PATH)"
 	@if [ -f $(BUILD_DIR)/main.pdfpc ]; then \
-		mv $(BUILD_DIR)/main.pdfpc $(BUILD_DIR)/$(STUDENT_LAST)_$(STUDENT_NAME)_$(STUDENT_LU)_tesis_$(PROJECT).pdfpc; \
+		mv "$(BUILD_DIR)/main.pdfpc" "$(BUILD_DIR)/$(basename $(OUTPUT_NAME)).pdfpc"; \
 		echo "Generated .pdfpc file for speaker notes."; \
 	fi
 

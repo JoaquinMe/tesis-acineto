@@ -37,6 +37,7 @@ src/
 # =========================
 build/
 indice_comentado/contenido.tex
+output/
 
 # =========================
 # OS files
