@@ -34,6 +34,14 @@ LATEXMK = latexmk -$(LATEX) $(LATEXOPT) -pdf \
 # =========================
 all: $(OUTPUT_PATH)
 
+# Reconstruye desde cero el proyecto seleccionado y abre el PDF resultante.
+# En macOS puede invocarse con: make open OPEN=open
+OPEN ?= xdg-open
+open:
+	$(MAKE) clean PROJECT="$(PROJECT)"
+	$(MAKE) all PROJECT="$(PROJECT)"
+	$(OPEN) "$(OUTPUT_PATH)"
+
 all-projects:
 	@for p in $(PROJECTS); do \
 		echo "Building $$p..."; \
@@ -67,4 +75,4 @@ clean-all:
 
 FORCE:
 
-.PHONY: all all-projects clean clean-all FORCE
+.PHONY: all open all-projects clean clean-all FORCE
